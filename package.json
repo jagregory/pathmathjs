@@ -1,0 +1,11 @@
+{
+  "name": "path-math",
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0",
+    "mocha-traceur": "^2.1.0"
+  },
+  "scripts": {
+    "test": "mocha --compilers js:mocha-traceur spec/*"
+  }
+}
