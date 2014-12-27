@@ -1,3 +1,4 @@
 import Line from './line'
+import Bezier from './bezier'
 
-export default { Line }
+export default { Line, Bezier }
