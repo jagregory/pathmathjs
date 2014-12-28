@@ -1,3 +1,11 @@
+import Convert from './bezier-convert'
+
+function splitQuadratic(bezier, d) {
+  let cubic = Convert.quadraticToCubic(bezier)
+
+  return splitCubic(cubic, d).map(Convert.cubicToQuadratic)
+}
+
 function splitCubic(bezier, d) {
   let x1 = bezier[0][0],          y1 = bezier[0][1],
       x2 = bezier[1][0],          y2 = bezier[1][1],
@@ -17,11 +25,15 @@ function splitCubic(bezier, d) {
 }
 
 function split(bezier, d) {
+  if (bezier.length === 3) {
+    return splitQuadratic(bezier, d)
+  }
+
   if (bezier.length === 4) {
     return splitCubic(bezier, d)
   }
 
-  return []
+  throw 'Invalid bezier specification'
 }
 
-export default { split }
+export default { split, splitCubic, splitQuadratic }
