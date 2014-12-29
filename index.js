@@ -1,4 +1,5 @@
-import Line from './line'
+import Arc from './arc'
 import Bezier from './bezier'
+import Line from './line'
 
-export default { Line, Bezier }
+export default { Arc, Line, Bezier }
