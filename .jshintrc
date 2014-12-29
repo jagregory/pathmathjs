@@ -1,0 +1,8 @@
+{
+  "asi": true,
+  "esnext": true,
+  "undef": true,
+  "unused": true,
+  "shadow": true,
+  "quotmark": "single"
+}

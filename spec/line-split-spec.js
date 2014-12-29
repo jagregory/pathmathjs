@@ -27,7 +27,7 @@ describe('line', () => {
   it('splits diagonal line', () => {
     let l = Line.split([[0, 10], [2.5, 50]], 0.75)
     expect(l.length).to.eql(2)
-    expect(l[0]).to.eql([[0, 10], [1.875, 47.5]])
-    expect(l[1]).to.eql([[1.875, 47.5], [2.5, 50]])
+    expect(l[0]).to.eql([[0, 10], [1.875, 40]])
+    expect(l[1]).to.eql([[1.875, 40], [2.5, 50]])
   })
 })
