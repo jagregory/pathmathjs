@@ -2,6 +2,13 @@ let expect = require('chai').expect
 
 import Line from '../line'
 
+describe('Line#length', () => {
+  it('has correct length', () => {
+    let l = Line.length([[0, 0], [10, 10]])
+    expect(l).to.eq(14.142135623730951)
+  })
+})
+
 describe('Line#split', () => {
   it('splits regular line', () => {
     let l = Line.split([[0, 0], [10, 10]], 0.5)
