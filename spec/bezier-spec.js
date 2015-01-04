@@ -2,7 +2,7 @@ let expect = require('chai').expect
 
 import Bezier from '../bezier'
 
-describe('#split', () => {
+describe('Bezier#split', () => {
   it('splits regular quadratic bezier', () => {
     let l = Bezier.split([[100, 250], [250, 100], [400, 250]], 0.5)
     expect(l.length).to.eql(2)

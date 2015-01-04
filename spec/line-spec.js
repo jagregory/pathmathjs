@@ -2,7 +2,7 @@ let expect = require('chai').expect
 
 import Line from '../line'
 
-describe('line', () => {
+describe('Line#split', () => {
   it('splits regular line', () => {
     let l = Line.split([[0, 0], [10, 10]], 0.5)
     expect(l.length).to.eql(2)

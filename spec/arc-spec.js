@@ -6,8 +6,7 @@ let expect = Chai.expect
 
 import Arc from '../arc'
 
-
-describe('#split', () => {
+describe('Arc#split', () => {
   describe('unrotated', () => {
     it('large positive angle direction circular arc', () => {
       let arc = [[0, 0], [50, 50], 0, true, true, [50, 50]]
