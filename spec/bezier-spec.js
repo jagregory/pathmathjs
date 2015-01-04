@@ -2,6 +2,18 @@ let expect = require('chai').expect
 
 import Bezier from '../bezier'
 
+describe('Bezier#length', () => {
+  it('length of regular quadratic bezier', () => {
+    let l = Bezier.length([[100, 250], [250, 100], [400, 250]])
+    expect(l).to.eql(344.33807240889587)
+  })
+
+  it('length of regular cubic bezier', () => {
+    let l = Bezier.length([[0, 0], [400, 0], [0, 400], [400, 400]])
+    expect(l).to.eql(432.5286729004888)
+  })
+})
+
 describe('Bezier#split', () => {
   it('splits regular quadratic bezier', () => {
     let l = Bezier.split([[100, 250], [250, 100], [400, 250]], 0.5)
