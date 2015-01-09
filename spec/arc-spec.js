@@ -6,6 +6,22 @@ let expect = Chai.expect
 
 import Arc from '../arc'
 
+describe('Arc#length', () => {
+  it('large positive angle direction circular arc', () => {
+    let arc = [[0, 0], [50, 50], 0, true, true, [50, 50]]
+
+    expect(Arc.length(arc)).to.eq(235.61944901923448)
+    expect(Arc.length(arc, 0.5)).to.eq(235.61944901923448/2)
+  })
+
+  it('large positive angle direction elliptical arc', () => {
+    let arc = [[0, 0], [90, 50], 0, true, true, [90, 90]]
+    
+    expect(Arc.length(arc)).to.eq(205.19816557450145)
+    expect(Arc.length(arc, 0.5)).to.eq(205.19816557450145/2)
+  })
+})
+
 describe('Arc#split', () => {
   describe('unrotated', () => {
     it('large positive angle direction circular arc', () => {
