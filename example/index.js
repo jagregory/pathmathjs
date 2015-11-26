@@ -17,39 +17,54 @@ function clearSvgs() {
   }
 }
 
+function pathToD(path) {
+  let d = ''
+
+  for (let i = 0; i < path.length; i++) {
+    let [type, ...seg] = path[i]
+    
+    if (i === 0) {
+      d += 'M'+svgpt(seg[0])
+    }
+
+    if (type === 'line') {
+      d += 'L'+svgpt(seg[1])
+    } else if (type === 'cubic-bezier') {
+      d += 'C'+svgpt(seg[1])+' '+svgpt(seg[2])+' '+svgpt(seg[3])
+    } else if (type === 'quadratic-bezier') {
+      d += 'Q'+svgpt(seg[1])+' '+svgpt(seg[2])
+    }
+  }
+
+  return d
+}
+
 function update(pos) {
   clearSvgs()
   console.clear()
 
   // lines
   ;(function() {
-    let line = [[0, 0], [100, 100]]
-    let splitLine = PathMath.Line.split(line, pos)
-
     let svg = document.getElementById('lines')
-    svg.appendChild(createSvgElement('line', {
-      x1: line[0][0],
-      y1: line[0][1],
-      x2: line[1][0],
-      y2: line[1][1],
+    let el = createSvgElement('path', {
+      d: 'M0,0 L100,100',
       stroke: 'black',
       'stroke-width': 2
-    }))
-    svg.appendChild(createSvgElement('line', {
-      x1: splitLine[0][0][0],
-      y1: splitLine[0][0][1],
-      x2: splitLine[0][1][0],
-      y2: splitLine[0][1][1],
-      stroke: 'red',
+    })
+
+    let path = PathMath.Svg.convert(el)
+    let [left, right] = PathMath.split(path, pos)
+
+    svg.appendChild(el)
+    left && svg.appendChild(createSvgElement('path', {
+      d: pathToD(left),
+      stroke: 'blue',
       'stroke-width': 2,
       style: 'transform:translate(30px, 0)'
     }))
-    svg.appendChild(createSvgElement('line', {
-      x1: splitLine[1][0][0],
-      y1: splitLine[1][0][1],
-      x2: splitLine[1][1][0],
-      y2: splitLine[1][1][1],
-      stroke: 'blue',
+    right && svg.appendChild(createSvgElement('path', {
+      d: pathToD(right),
+      stroke: 'red',
       'stroke-width': 2,
       style: 'transform:translate(30px, 0)'
     }))
@@ -57,26 +72,27 @@ function update(pos) {
 
   // cubic bezier
   ;(function() {
-    let bezier = [[0, 0], [100, 0], [0, 100], [100, 100]]
-    let splitBezier = PathMath.Bezier.split(bezier, pos)
-    let toSvg = b => `M${svgpt(b[0])} C${b.slice(1).map(svgpt).join(' ')}`
-
     let svg = document.getElementById('cubic-bezier')
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(bezier),
+    let el = createSvgElement('path', {
+      d: 'M0,0 C100,0 0,100 100,100',
       stroke: 'black',
       'stroke-width': 2,
       fill: 'transparent'
-    }))
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(splitBezier[0]),
+    })
+
+    let path = PathMath.Svg.convert(el)
+    let [left, right] = PathMath.split(path, pos)
+
+    svg.appendChild(el)
+    left && svg.appendChild(createSvgElement('path', {
+      d: pathToD(left),
       stroke: 'red',
       'stroke-width': 2,
       fill: 'transparent',
       style: 'transform:translate(60px, 0)'
     }))
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(splitBezier[1]),
+    right && svg.appendChild(createSvgElement('path', {
+      d: pathToD(right),
       stroke: 'blue',
       'stroke-width': 2,
       fill: 'transparent',
@@ -86,26 +102,28 @@ function update(pos) {
 
   // quadratic bezier
   ;(function() {
-    let bezier = [[0, 0], [75,5], [100,50]]
-    let splitBezier = PathMath.Bezier.split(bezier, pos)
-    let toSvg = b => `M${svgpt(b[0])} Q${b.slice(1).map(svgpt).join(' ')}`
 
     let svg = document.getElementById('quadratic-bezier')
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(bezier),
+    let el = createSvgElement('path', {
+      d: 'M0,0 Q75,5 100,50',
       stroke: 'black',
       'stroke-width': 2,
       fill: 'transparent'
-    }))
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(splitBezier[0]),
+    })
+
+    let path = PathMath.Svg.convert(el)
+    let [left, right] = PathMath.split(path, pos)
+
+    svg.appendChild(el)
+    left && svg.appendChild(createSvgElement('path', {
+      d: pathToD(left),
       stroke: 'red',
       'stroke-width': 2,
       fill: 'transparent',
       style: 'transform:translate(60px, 0)'
     }))
-    svg.appendChild(createSvgElement('path', {
-      d: toSvg(splitBezier[1]),
+    right && svg.appendChild(createSvgElement('path', {
+      d: pathToD(right),
       stroke: 'blue',
       'stroke-width': 2,
       fill: 'transparent',
@@ -115,42 +133,42 @@ function update(pos) {
 
   // arcs
   ;(function() {
-    let toSvg = a => `M${svgpt(a[0])} A${svgpt(a[1])} ${a[2]} ${a[3]?1:0},${a[4]?1:0} ${svgpt(a[5])}`
     let arcs = [
-      [[0, 0], [50, 50], -45, true, true,   [50, 50]],
-      [[0, 0], [90, 50], 9, true, true,   [90, 90]],
-      [[0, 0], [50, 50], 45, true, false,  [50, 50]],
-      [[0, 0], [90, 50], 90, true, false,  [50, 50]],
-      [[0, 0], [50, 50], 135, false, true,  [50, 50]],
-      [[0, 0], [90, 50], 180, false, true,  [50, 50]],
-      [[0, 0], [50, 50], 270, false, false, [50, 50]],
-      [[0, 0], [90, 50], 355, false, false, [50, 50]],
+      // 'M0,0 A50,50 -45 1,1 50,50',
+      // 'M0,0 A90,50 9 1,1 90,90',
+      // 'M0,0 A50,50 45 1,0 50,50',
+      'M0,0 A90,50 90 1,0 50,50',
+      'M0,0 A50,50 135 0,1 50,50',
+      'M0,0 A90,50 180 0,1 50,50',
+      'M0,0 A50,50 270 0,0 50,50',
+      'M0,0 A90,50 355 0,0 50,50',
     ]
     let y = 60
     
     let svg = document.getElementById('arc')
 
     arcs.forEach(arc => {
-      let splitArc = PathMath.Arc.split(arc, pos)
-
-      svg.appendChild(createSvgElement('path', {
-        d: toSvg(arc),
+      let el = createSvgElement('path', {
+        d: arc,
         stroke: 'black',
         'stroke-width': 1,
         fill: 'transparent',
         style: `transform:translate(180px,${y}px)`
-      }))
+      })
+      svg.appendChild(el)
 
-      svg.appendChild(createSvgElement('path', {
-        d: toSvg(splitArc[0]),
+      let path = PathMath.Svg.convert(el)
+      let [left, right] = PathMath.split(path, pos)
+
+      left && svg.appendChild(createSvgElement('path', {
+        d: pathToD(left),
         stroke: 'red',
         'stroke-width': 2,
         fill: 'transparent',
         style: `transform:translate(180px,${y}px)`
       }))
-
-      svg.appendChild(createSvgElement('path', {
-        d: toSvg(splitArc[1]),
+      right && svg.appendChild(createSvgElement('path', {
+        d: pathToD(right),
         stroke: 'blue',
         'stroke-width': 2,
         fill: 'transparent',

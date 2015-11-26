@@ -7,7 +7,7 @@ import Arc from '../arc'
 // stats: Arc#split x 1,143,954 ops/sec ±0.76% (96 runs sampled)
 // stats: Arc#split x 1,316,498 ops/sec ±0.75% (97 runs sampled)
 describe('performance', () => {
-  it('should be fast', function() {
+  xit('should be fast', function() {
     this.timeout(0)
     var suite = new Benchmark.Suite;
 
